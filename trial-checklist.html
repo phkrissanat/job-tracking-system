@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>แบบฟอร์มตรวจสอบ TRIAL — 740-FM-028</title>
+<meta name="theme-color" content="#2563eb">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{overflow-x:hidden;max-width:100vw}
+:root{
+  --font:'PSL Text','PSLText','Sarabun','Segoe UI',Arial,sans-serif;
+  --bg:#f0f2f7;--bg2:#fff;--bg3:#f5f6fa;
+  --surface:#e8ecf5;--surface2:#dde2ef;
+  --border:rgba(50,70,140,.10);--border2:rgba(50,70,140,.18);
+  --accent:#2563eb;--accent2:#1d4ed8;--accent-lt:#eff5ff;
+  --text:#1a1f35;--text2:#505880;--text3:#9099bc;
+  --green:#16a34a;--green-lt:#f0faf4;
+  --red:#dc2626;--red-lt:#fff1f1;
+  --amber:#b45309;--amber-lt:#fffbeb;
+  --shadow-lg:0 4px 24px rgba(20,40,100,.13);
+  --r:8px;--r2:12px;--r3:16px;
+}
+html[data-theme="dark"]{
+  --bg:#0f1220;--bg2:#1b2032;--bg3:#20263a;
+  --surface:#262c42;--surface2:#333a54;
+  --border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.16);
+  --accent:#3b82f6;--accent2:#7fb0ff;--accent-lt:rgba(37,99,235,.18);
+  --text:#e8ebf5;--text2:#b6bdda;--text3:#7b83a8;
+  --green:#4ade80;--green-lt:rgba(22,163,74,.18);
+  --red:#f87171;--red-lt:rgba(220,38,38,.18);
+  --amber:#fbbf24;--amber-lt:rgba(180,83,9,.22);
+}
+body{font-family:var(--font);font-size:15px;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+
+.topbar{height:56px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:10px;position:sticky;top:0;z-index:50;box-shadow:0 1px 0 var(--border)}
+.back-btn{display:flex;align-items:center;gap:6px;color:var(--text2);text-decoration:none;font-size:13.5px;padding:8px 10px;border-radius:var(--r);flex-shrink:0}
+.back-btn:hover{background:var(--surface)}
+.topbar .title{font-weight:700;font-size:15px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.icon-btn{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2);flex-shrink:0}
+.icon-btn:hover{background:var(--surface)}
+
+.content{flex:1;padding:16px;max-width:880px;margin:0 auto;width:100%}
+.empty{text-align:center;padding:60px 20px;color:var(--text3)}
+
+/* ── JOB INFO CARD */
+.job-card{background:var(--bg2);border:1.5px solid var(--border2);border-radius:var(--r2);padding:16px;margin-bottom:14px}
+.job-card .code{font-family:'Courier New',monospace;font-weight:700;color:var(--accent2);font-size:15px}
+.job-card .detail{font-size:14px;color:var(--text);margin-top:2px}
+.job-card .meta{font-size:12.5px;color:var(--text3);margin-top:4px}
+
+/* ── HEADER FORM FIELDS */
+.header-box{background:var(--bg2);border:1.5px solid var(--border2);border-radius:var(--r2);padding:16px;margin-bottom:14px}
+.header-box h3{font-size:14px;margin-bottom:12px;color:var(--text)}
+.field-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px 12px}
+.field-grid label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--text2)}
+.field-grid input{padding:8px 10px;border-radius:var(--r);border:1.5px solid var(--border2);background:var(--surface);color:var(--text);font-family:var(--font);font-size:13.5px}
+
+/* ── SECTION / ITEM CARDS */
+.section-card{background:var(--bg2);border:1.5px solid var(--border2);border-radius:var(--r2);margin-bottom:12px;overflow:hidden}
+.section-head{background:var(--surface);padding:10px 16px;font-weight:700;font-size:13.5px;color:var(--text);display:flex;align-items:center;gap:8px}
+.section-head .no{color:var(--accent2)}
+.section-note{font-size:11.5px;color:var(--text3);padding:0 16px 8px;font-weight:400}
+.item-row{padding:12px 16px;border-top:1px solid var(--border)}
+.item-row.sub{padding-left:32px;background:var(--bg3)}
+.item-head{display:flex;gap:8px;align-items:baseline;margin-bottom:6px}
+.item-no{font-weight:700;color:var(--accent2);font-size:12.5px;flex-shrink:0}
+.item-desc{font-size:13.5px;color:var(--text);flex:1}
+.item-meta{font-size:11.5px;color:var(--text3);margin-bottom:8px;display:flex;flex-wrap:wrap;gap:10px}
+.item-meta b{font-weight:600;color:var(--text2)}
+.item-controls{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.val-input{width:80px;padding:6px 8px;border-radius:6px;border:1.5px solid var(--border2);background:var(--surface);color:var(--text);font-family:var(--font);font-size:13px}
+.val-unit{font-size:12px;color:var(--text3)}
+.okng-toggle{display:flex;gap:4px;margin-left:auto}
+.okng-btn{padding:6px 12px;border-radius:6px;border:1.5px solid var(--border2);background:var(--surface);color:var(--text2);font-family:var(--font);font-size:12.5px;font-weight:700;cursor:pointer}
+.okng-btn.ok.on{background:var(--green-lt);border-color:var(--green);color:var(--green)}
+.okng-btn.ng.on{background:var(--red-lt);border-color:var(--red);color:var(--red)}
+
+/* ── ACCESSORIES / SUMMARY / SIGNATURES */
+.acc-row{display:flex;align-items:center;padding:9px 16px;border-top:1px solid var(--border);font-size:13.5px;gap:10px}
+.acc-row .no{color:var(--text3);width:20px}
+.acc-row .name{flex:1}
+textarea.summary-input{width:100%;padding:10px 12px;border-radius:var(--r);border:1.5px solid var(--border2);background:var(--surface);color:var(--text);font-family:var(--font);font-size:13.5px;min-height:80px;resize:vertical}
+.sig-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:10px}
+.sig-grid label{display:flex;flex-direction:column;gap:4px;font-size:11.5px;color:var(--text2);text-align:center}
+.sig-grid input{padding:8px 10px;border-radius:var(--r);border:1.5px solid var(--border2);background:var(--surface);color:var(--text);font-family:var(--font);font-size:13px;text-align:center}
+
+/* ── PROGRESS + ACTIONS */
+.progress-bar{position:sticky;bottom:0;background:var(--bg2);border-top:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 -2px 12px rgba(20,40,100,.08)}
+.progress-info{font-size:12.5px;color:var(--text2);flex:1}
+.progress-track{height:6px;background:var(--surface);border-radius:3px;overflow:hidden;margin-top:4px}
+.progress-fill{height:100%;background:var(--accent);transition:width .2s}
+.btn-save{padding:10px 18px;border-radius:var(--r);border:1.5px solid var(--border2);background:var(--surface);color:var(--text2);font-family:var(--font);font-size:13.5px;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn-complete{padding:10px 18px;border-radius:var(--r);border:none;background:var(--accent);color:#fff;font-family:var(--font);font-size:13.5px;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn-complete:disabled{opacity:.45;cursor:not-allowed}
+
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg2);padding:10px 20px;border-radius:var(--r);font-size:13.5px;z-index:200;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+.toast.err{background:var(--red)}
+.toast.ok{background:var(--green)}
+
+@media(max-width:600px){
+  .field-grid{grid-template-columns:1fr 1fr}
+  .sig-grid{grid-template-columns:1fr}
+  .content{padding:10px}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-btn" href="validator.html">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    กลับ
+  </a>
+  <div class="title">แบบฟอร์มตรวจสอบ TRIAL (740-FM-028)</div>
+  <div class="icon-btn" onclick="toggleTheme()" title="โหมดกลางคืน">
+    <svg id="themeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+  </div>
+</div>
+
+<div class="content" id="content">
+  <div class="empty" id="loadingMsg">กำลังโหลดข้อมูล...</div>
+</div>
+
+<div class="progress-bar" id="progressBar" style="display:none">
+  <div class="progress-info">
+    <span id="progressText">ตรวจแล้ว 0/143 จุด</span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+  <button class="btn-save" onclick="saveChecklist(false)">บันทึกร่าง</button>
+  <button class="btn-complete" id="btnComplete" onclick="saveChecklist(true)" disabled>บันทึกและยืนยันครบถ้วน</button>
+</div>
+
+<div class="toast" id="toastEl"></div>
+
+<script>
+
+// ── DATA
+var TRIAL_CHECKLIST_TEMPLATE = [
+{no:'1', title:'น้ำหนักหลังคา', items:[
+  {no:'1.1',
+    desc:'ช่วงสั้น ( D-CAB)',
+    spec:'30-40 กก',
+    tool:'ตราชั่ง',
+    type:'single',
+    unit:'กก.'},
+  {no:'1.2',
+    desc:'ช่วงสั้น ( CAB )',
+    spec:'40-50 กก',
+    tool:'ตราชั่ง',
+    type:'single',
+    unit:'กก.'},
+  {no:'1.3',
+    desc:'ช่วงยาว ( LONG BED )',
+    spec:'60-70 กก',
+    tool:'ตราชั่ง',
+    type:'single',
+    unit:'กก.'}
+]},
+{no:'2', title:'ระยะหลังคา', note:'ความแตกต่างหลังคาซ้าย-ขวาหน้าหลังมีได้ไม่เกิน 2 มม.', items:[
+  {no:'2.1',
+    desc:'ขนาดความกว้างด้านหน้า',
+    spec:'± 5 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'},
+  {no:'2.2',
+    desc:'ขนาดความกว้างด้านหลัง',
+    spec:'± 5 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'},
+  {no:'2.3',
+    desc:'ขนาดความกว้างด้านในหลัง',
+    spec:'± 5 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'},
+  {no:'2.4',
+    desc:'ขนาดความยาวด้านซ้าย',
+    spec:'± 2 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'},
+  {no:'2.5',
+    desc:'ขนาดความยาวด้านขวา',
+    spec:'± 2 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'},
+  {no:'2.6',
+    desc:'ความสูงหัวเก๋ง',
+    spec:'± 2 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'}
+]},
+{no:'3', title:'เส้นทะแยงมุม', items:[
+  {no:'3.1',
+    desc:'เส้นทะแยงมุมด้านซ้าย',
+    spec:'ค่าความแตกต่างซ้าย-ขวาแตกต่างไม่เกิน 5 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'},
+  {no:'3.2',
+    desc:'เส้นทะแยงมุมด้านขวา',
+    spec:'ค่าความแตกต่างซ้าย-ขวาแตกต่างไม่เกิน 5 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'}
+]},
+{no:'4', title:'ความกว้างตะเกียบ', items:[
+  {no:'4.1',
+    desc:'ด้านหน้าซ้าย',
+    spec:'± 2 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'},
+  {no:'4.2',
+    desc:'ด้านหน้าขวา',
+    spec:'± 2 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'},
+  {no:'4.3',
+    desc:'ด้านหลังซ้าย',
+    spec:'± 2 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'},
+  {no:'4.4',
+    desc:'ด้านหลังขวา',
+    spec:'± 2 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'},
+  {no:'4.5',
+    desc:'โรบาร์ด้านหน้า',
+    spec:'± 2 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'}
+]},
+{no:'5', title:'ความหนาตะเกียบ', items:[
+  {no:'5.1',
+    desc:'ความหนาตะเกียบด้านหน้า',
+    spec:'5 ± 1 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'},
+  {no:'5.2',
+    desc:'ความหนาตะเกียบด้านซ้าย',
+    spec:'5 ± 1 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'},
+  {no:'5.3',
+    desc:'ความหนาตะเกียบด้านขวา',
+    spec:'5 ± 1 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'}
+]},
+{no:'6', title:'ความหนาบานพับหลังคา', items:[
+  {no:'6.1',
+    desc:'ฝาท้ายข้างซ้าย',
+    spec:'10 ± 2 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'},
+  {no:'6.2',
+    desc:'ฝาท้ายข้างขวา',
+    spec:'10 ± 2 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'},
+  {no:'6.3',
+    desc:'ฝาเปิดข้างด้านหน้าซ้าย',
+    spec:'10 ± 2 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'},
+  {no:'6.4',
+    desc:'ฝาเปิดข้างด้านหลังซ้าย',
+    spec:'10 ± 2 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'},
+  {no:'6.5',
+    desc:'ฝาเปิดข้างด้านหน้าขวา',
+    spec:'10 ± 2 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'},
+  {no:'6.6',
+    desc:'ฝาเปิดข้างด้านหลังขวา',
+    spec:'10 ± 2  มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'}
+]},
+{no:'7', title:'ความหนาจุดยึดหูโช้คอัพ', items:[
+  {no:'7.1',
+    desc:'ฝาท้ายข้างซ้าย',
+    spec:'10 ± 2 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'},
+  {no:'7.2',
+    desc:'ฝาท้ายข้างขวา',
+    spec:'10 ± 2 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'},
+  {no:'7.3',
+    desc:'ฝาเปิดข้างด้านหน้าซ้าย',
+    spec:'10 ± 2 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'},
+  {no:'7.4',
+    desc:'ฝาเปิดข้างด้านหลังซ้าย',
+    spec:'10 ± 2 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'},
+  {no:'7.5',
+    desc:'ฝาเปิดข้างด้านหน้าขวา',
+    spec:'10 ± 2 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'},
+  {no:'7.6',
+    desc:'ฝาเปิดข้างด้านหลังขวา',
+    spec:'10 ± 2  มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'}
+]},
+{no:'8', title:'ความหนาจุดยึดซิ้งล็อคกลอน', items:[
+  {no:'8.1',
+    desc:'ฝาท้ายข้างซ้าย',
+    spec:'10 ± 2 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'},
+  {no:'8.2',
+    desc:'ฝาท้ายข้างขวา',
+    spec:'10 ± 2 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'},
+  {no:'8.3',
+    desc:'ฝาเปิดข้างด้านหน้าซ้าย',
+    spec:'10 ± 2 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'},
+  {no:'8.4',
+    desc:'ฝาเปิดข้างด้านหลังซ้าย',
+    spec:'10 ± 2 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'},
+  {no:'8.5',
+    desc:'ฝาเปิดข้างด้านหน้าขวา',
+    spec:'10 ± 2 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'},
+  {no:'8.6',
+    desc:'ฝาเปิดข้างด้านหลังขวา',
+    spec:'10 ± 2  มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'}
+]},
+{no:'9', title:'รางน้ำ', items:[
+  {no:'9.1',
+    desc:'การตั้งฉากรางน้ำด้านซ้าย',
+    spec:'รางน้ำต้องตั้งฉาก',
+    tool:'ฉากมาตรฐาน',
+    type:'single'},
+  {no:'9.2',
+    desc:'การตั้งฉากรางน้ำด้านขวา',
+    spec:'รางน้ำต้องตั้งฉาก',
+    tool:'ฉากมาตรฐาน',
+    type:'single'}
+]},
+{no:'10', title:'ความหนาลิ้นกระดูกงู', note:'4', items:[
+  
+]},
+{no:'11', title:'ตำแหน่งมาร์ครู สายไฟออก', items:[
+  {no:'11.1',
+    desc:'มาร์ครูสายไฟ',
+    spec:'ออกทางด้าน    -',
+    tool:'สายตา',
+    type:'single'},
+  {no:'11.2',
+    desc:'ขนาดรูเจาะสายไฟ',
+    spec:'- มม.',
+    tool:'เวอร์เนียร์',
+    type:'single'}
+]},
+{no:'12', title:'ตำแหน่งมาร์ค KWICK KLAMP', items:[
+  {no:'12.1',
+    desc:'ตำแหน่งมาร์ครูเจาะด้านซ้าย',
+    type:'single',
+    sub:[
+      {no:'12.1.1',
+    desc:'ระยะ A',
+    spec:'± 2 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'},
+      {no:'12.1.2',
+    desc:'ระยะ B',
+    spec:'± 2 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'},
+      {no:'12.1.3',
+    desc:'ระยะ  C',
+    spec:'± 2 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'}
+    ]},
+  {no:'12.2',
+    desc:'ระยะห่างปลายอลูมีเนียมฉากกับท้องรางน้ำข้างซ้าย',
+    spec:'-',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'},
+  {no:'12.3',
+    desc:'ตำแหน่งมาร์ครูเจาะด้านขวา',
+    type:'single',
+    sub:[
+      {no:'12.3.1',
+    desc:'ระยะ A',
+    spec:'± 2 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'},
+      {no:'12.3.2',
+    desc:'ระยะ B',
+    spec:'± 2 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'},
+      {no:'12.3.3',
+    desc:'ระยะ B',
+    spec:'± 2 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'}
+    ]},
+  {no:'12.4',
+    desc:'ระยะห่างปลายอลูมีเนียมฉากกับท้างรางน้ำข้างซ้าย',
+    spec:'ไม่น้อยกว่า  50 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'}
+]},
+{no:'13', title:'การประกบแม่พิมพ์', items:[
+  {no:'13.1',
+    desc:'ขนาดรอยประกอบพิมพ์',
+    spec:'ไม่เกิน 1.5 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'},
+  {no:'13.2',
+    desc:'ระดับรอยต่อแม่พิมพ์',
+    spec:'ไม่เกิน 1 มม.ต้องเป็นแนวเดียวกันกับระดับหลังคา',
+    tool:'ฟุตเหล็ก/เทปเปอร์เกจ',
+    type:'single',
+    unit:'มม.'}
+]},
+{no:'14', title:'สภาพผิวแม่พิมพ์', items:[
+  {no:'14.1',
+    desc:'บริเวณด้านข้างหลังคาและเสาหลัง(A)',
+    spec:'ต้องไม่มีรอยใดๆเช่น คลื่น,ตามด',
+    tool:'สายตา,สัมผัส',
+    type:'single'},
+  {no:'14.2',
+    desc:'บริเวณด้านบนหลังคาและโรบาร์หน้า ( B )',
+    spec:'ต้องไม่มีรอยใดๆเช่น คลื่น,ตามด',
+    tool:'สายตา,สัมผัส',
+    type:'single'},
+  {no:'14.3',
+    desc:'ความลึก จอบานเลื่อน รางน้ำ ตะเกียบ ( C )',
+    spec:'มีรอยได้บางแต่ต้องไม่เป็นหลุมลึกหรือเม็ดนูน',
+    tool:'สายตา,สัมผัส',
+    type:'single'}
+]},
+{no:'15', title:'การประกอบชุด RACK หลังคา', items:[
+  {no:'15.1',
+    desc:'ระยะโค้งท้ายถึงรูแร็ค',
+    type:'single',
+    sub:[
+      {no:'15.1.1',
+    desc:'ข้างซ้าย',
+    spec:'ซ้าย-ขวาแตกต่างกันไม่เกิน 5 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'},
+      {no:'15.1.2',
+    desc:'ข้างขวา',
+    spec:'ซ้าย-ขวาแตกต่างกันไม่เกิน 5 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'}
+    ]},
+  {no:'15.2',
+    desc:'ระยะตำแหน่งมาร์ค RACK',
+    spec:'ต้องสวมพอดีกับแร็คมาตราฐานที่กำหนด',
+    tool:'RACK มาตรฐาน',
+    type:'single'},
+  {no:'15.3',
+    desc:'ความกว้างมาร์คแร็กด้านหน้า',
+    spec:'ซ้าย-ขวาแตกต่างกันไม่เกิน 5 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'},
+  {no:'15.4',
+    desc:'ความกว้างมาร์คแร็คด้านหลัง',
+    spec:'ซ้าย-ขวาแตกต่างกันไม่เกิน 5 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'}
+]},
+{no:'16', title:'ระดับความจมฝาท้าย', items:[
+  {no:'16.1',
+    desc:'ด้านซ้าย',
+    spec:'0       มม.ซ้าย-ขวาแตกต่างกันไม่เกิน 2 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'},
+  {no:'16.2',
+    desc:'ด้านขวา',
+    spec:'0      มม.ซ้าย-ขวาแตกต่างกันไม่เกิน 2 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'}
+]},
+{no:'17', title:'ช่องไฟฝาท้ายด้านบน', items:[
+  {no:'17.1',
+    desc:'ข้างซ้าย',
+    spec:'17±2 มม.ซ้าย-ขวา แตกต่างกันได้ไม่เกิน 2 มม.',
+    tool:'เวอร์เนียร์/ฟุตเหล็ก',
+    type:'single',
+    unit:'มม'},
+  {no:'17.2',
+    desc:'ข้างขวา',
+    spec:'17±2 มม.ซ้าย-ขวา แตกต่างกันได้ไม่เกิน 2 มม.',
+    tool:'เวอร์เนียร/ฟุตเหล็ก',
+    type:'single',
+    unit:'มม.'}
+]},
+{no:'18', title:'ช่องไฟฝาท้ายด้านข้าง', items:[
+  {no:'19.1',
+    desc:'ข้างซ้าย',
+    spec:'8±3 มม.ซ้าย-ขวา แตกต่างกันได้ไม่เกิน 2 มม.',
+    tool:'เวอร์เนียร์/ฟุตเหล็ก',
+    type:'single',
+    unit:'มม'},
+  {no:'19.2',
+    desc:'ข้างขวา',
+    spec:'8±3 มม.ซ้าย-ขวา แตกต่างกันได้ไม่เกิน 2 มม.',
+    tool:'เวอร์เนียร์/ฟุตเหล็ก',
+    type:'single',
+    unit:'มม'}
+]},
+{no:'19', title:'ระยะความสูงฝาท้ายขณะเปิด', items:[
+  {no:'19.1',
+    desc:'ความสูงฝาท้ายด้านซ้าย',
+    spec:'ความสูงด้านซ้ายและด้านขวาแตกต่างกันไม่เกิน 10 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'},
+  {no:'19.2',
+    desc:'ความสูงฝาท้ายด้านขวา',
+    spec:'ความสูงด้านซ้ายและด้านขวาแตกต่างกันไม่เกิน 10 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'}
+]},
+{no:'20', title:'การประกอบโช้คอัพฝาท้าย', items:[
+  {no:'20.1',
+    desc:'ระยะแกนโช้คอัพขณะเปิด',
+    type:'single',
+    sub:[
+      {no:'20.1.1',
+    desc:'ด้านซ้าย',
+    spec:'ซ้าย-ขวาแตกต่างกันไม่เกิน 5 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'},
+      {no:'20.1.2',
+    desc:'ด้านขวา',
+    spec:'ซ้าย-ขวาแตกต่างกันไม่เกิน 5 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'}
+    ]},
+  {no:'20.2',
+    desc:'ระยะแกนโช้คอัพขณะปิด',
+    type:'single',
+    sub:[
+      {no:'20.2.1',
+    desc:'ด้านซ้าย',
+    spec:'ซ้าย-ขวาแตกต่างกันไม่เกิน 5 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'},
+      {no:'20.2.2',
+    desc:'ด้านขวา',
+    spec:'ซ้าย-ขวาแตกต่างกันไม่เกิน 5 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'}
+    ]},
+  {no:'20.3',
+    desc:'ระยะห่างของโช้คอัพกับกระดูกงูรางน้ำกับท้องรางน้ำ',
+    type:'single',
+    sub:[
+      {no:'20.3.1',
+    desc:'ด้านซ้าย',
+    spec:'ต้องไม่ต่ำกว่า 10 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'},
+      {no:'20.3.2',
+    desc:'ด้านขวา',
+    spec:'ต้องไม่ต่ำกว่า 10 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'มม.'}
+    ]},
+  {no:'20.5',
+    desc:'ระยะการเปิดฝาท้ายด้านบน',
+    spec:'มุมกระจกต้องห่างจากขอบไฟเบอร์ไม่ต่ำกว่า 5 มม.',
+    tool:'ฟุตเหล็ก/ตลับเมตร',
+    type:'single',
+    unit:'มม.'}
+]},
+{no:'21', title:'การประกอบชุดกลอนล็อคฝาท้าย', items:[
+  {no:'21.1',
+    desc:'ความหนาของรางน้ำบริเวณแป้นรับชุดกลอน',
+    spec:'10 ± 2 มม',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'},
+  {no:'21.2',
+    desc:'ตัวล็อคชุดกลอน',
+    spec:'ต้องเชื่อม CENTER',
+    tool:'สายตา',
+    type:'single'},
+  {no:'21.3',
+    desc:'มาร์คยึดซิงค์กลอนโรตารี่',
+    spec:'ต้องไม่เอียง,ประกอบกับแป้นคุ่ต้องพอดี',
+    tool:'สายตา',
+    type:'single'}
+]},
+{no:'22', title:'การประกอบกระดูกงูฝาท้าย', items:[
+  {no:'22.1',
+    desc:'ระยะห่างจากลิ้นกระดูกงูกับฝาท้าย',
+    spec:'17 ± 2 มม',
+    tool:'ฟุตเหล็ก/ตลับเมตร',
+    type:'single',
+    unit:'มม.'},
+  {no:'22.2',
+    desc:'ระยะมุมเมื่อประกอบยางกระดูกงู',
+    spec:'มุมของกระดูกงูต้องไม่หัก',
+    tool:'สายตา',
+    type:'single'}
+]},
+{no:'23', title:'การประกอบฝาเปิดข้างด้านซ้าย / ขวา', items:[
+  {no:'23.1',
+    desc:'ช่องไฟฝาข้างด้านซ้าย/ขวา',
+    spec:'( ซ้าย-ขวาแตกต่างกันได้ไม่เกิน 2 มม. )',
+    groupOnly:true,
+    sub:[
+      {no:'23.1.1',
+    desc:'ด้านบนหน้า',
+    spec:'17 ± 2 มม',
+    tool:'เวอร์เนียร์',
+    type:'lr'},
+      {no:'23.1.2',
+    desc:'ด้านบนหลัง',
+    spec:'17 ± 2 มม',
+    tool:'เวอร์เนียร์',
+    type:'lr'},
+      {no:'23.1.3',
+    desc:'ด้านข้างหน้า',
+    spec:'8 ± 2 มม',
+    tool:'เวอร์เนียร์',
+    type:'lr'},
+      {no:'23.1.4',
+    desc:'ด้านข้างหลัง',
+    spec:'8 ± 2 มม',
+    tool:'เวอร์เนียร์',
+    type:'lr'},
+      {no:'23.1.5',
+    desc:'ด้านล่างหน้า',
+    spec:'10 ± 2 มม',
+    tool:'เทปเปอร์เกจ',
+    type:'lr'},
+      {no:'23.1.6',
+    desc:'ด้านล่างหลัง',
+    spec:'10 ± 2 มม',
+    tool:'เทปเปอร์เกจ',
+    type:'lr'}
+    ]},
+  {no:'23.2',
+    desc:'ระยะแกนโช้คอัพฝาข้างขณะเปิดซ้าย /ขวา',
+    spec:'( ซ้าย-ขวา แตกต่างกันได้ไม่เกิน 5 มม.)',
+    type:'single',
+    sub:[
+      {no:'23.2.1',
+    desc:'ด้านหน้า',
+    spec:'± 5 มม.',
+    tool:'ฟุตเหล็ก/ตลับเมตร',
+    type:'single'},
+      {no:'23.2.2',
+    desc:'ด้านหลัง',
+    spec:'± 5 มม.',
+    tool:'ฟุตเหล็ก/ตลับเมตร',
+    type:'single'}
+    ]},
+  {no:'23.3',
+    desc:'ระยะแกนโช้คอัพฝาข้างขณะปิด ซ้าย/ขวา',
+    spec:'( ซ้าย-ขวา แตกต่างกันได้ไม่เกิน 5 มม.)',
+    type:'single',
+    sub:[
+      {no:'23.3.1',
+    desc:'ด้านหน้า',
+    spec:'± 5 มม.',
+    tool:'ฟุตเหล็ก/ตลับเมตร',
+    type:'lr'},
+      {no:'23.3.2',
+    desc:'ด้านหลัง',
+    spec:'± 5 มม.',
+    tool:'ฟุตเหล็ก/ตลับเมตร',
+    type:'lr'}
+    ]},
+  {no:'23.4',
+    desc:'ระยะห่างของโช้คอัพกับกระดูกงูรางน้ำกับท้องรางน้ำ',
+    spec:'ต้องไม่ต่ำกว่า 10 มม.',
+    tool:'ตลับเมตร',
+    type:'single'},
+  {no:'23.5',
+    desc:'ระยะการเปิดฝาท้ายด้านบน',
+    spec:'มุมกระจกต้องห่างจากขอบไฟเบอร์ไม่ต่ำกว่า 5 มม.',
+    tool:'ฟุตเหล็ก/ตลับเมตร',
+    type:'single'},
+  {no:'23.6',
+    desc:'ระยะการเปิด/ปิดฝาท้ายด้านบน',
+    spec:'ทุกจุดต้องห่างจากขอบไฟเบอร์ไม่ต่ำกว่า 5 มม.',
+    tool:'ฟุตเหล็ก/ตลับเมตร',
+    type:'single'},
+  {no:'23.7',
+    desc:'ความสูงข้างขณะเปิดซ้าย/ขวา',
+    groupOnly:true,
+    sub:[
+      {no:'23.7.1',
+    desc:'ด้านหน้า',
+    spec:'± 5 มม.',
+    tool:'ตลับเมตร',
+    type:'lr'},
+      {no:'23.7.2',
+    desc:'ด้านหลัง',
+    spec:'± 5 มม.',
+    tool:'ตลับเมตร',
+    type:'lr'}
+    ]},
+  {no:'23.8',
+    desc:'ระยะการประกอบชุดกลอนล็อคฝาข้าง',
+    spec:'ต้องได้จุดกึ่งกลาง',
+    tool:'สายตา',
+    type:'single'},
+  {no:'23.9',
+    desc:'ระยะห่างจากลิ้นกระดูกงูกับฝาข้าง',
+    spec:'10 ± 2 มม.',
+    tool:'ฟุตเหล็ก/ตลับเมตร',
+    type:'single'},
+  {no:'23.1',
+    desc:'ระยะมุมเมื่อประกอบยางกระดูกงู',
+    spec:'มุมของกระดูกงูต้องไม่หัก',
+    tool:'สายตา',
+    type:'single'},
+  {no:'23.11',
+    desc:'การปิดฝาข้าง',
+    spec:'กระดูกงูต้องไม่บี้กับรางน้ำ',
+    tool:'สายตา',
+    type:'single'}
+]},
+{no:'24', title:'ระดับความจมฝาท้าย', items:[
+  {no:'24.1',
+    desc:'ด้านซ้าย',
+    spec:'0       มม.ซ้าย-ขวาแตกต่างกันไม่เกิน 2 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'},
+  {no:'24.2',
+    desc:'ด้านขวา',
+    spec:'0      มม.ซ้าย-ขวาแตกต่างกันไม่เกิน 2 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'}
+]},
+{no:'25', title:'การประกอบฝาท้าย', items:[
+  {no:'25.1',
+    desc:'น้ำหนักฝาท้าย',
+    spec:'น้ำหนักฝาท้ายไม่เกิน 2 กก.',
+    tool:'ตราชั่ง',
+    type:'single',
+    unit:'กก.'},
+  {no:'25.2',
+    desc:'ความกว้างชายฝาท้าย',
+    spec:'± 2 มม.',
+    tool:'ตลับเมตร',
+    type:'single',
+    unit:'กก.'},
+  {no:'25.3',
+    desc:'ความหนาชายฝาท้าย',
+    spec:'±1 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม'},
+  {no:'25.4',
+    desc:'ความหนารอบตัวชิ้นงานขอบนอก',
+    spec:'±1 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม'},
+  {no:'25.5',
+    desc:'ความหนาลิ้นไฟเบอร์ ( แนวเสียบกระดูกงู )',
+    spec:'±1 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม'},
+  {no:'25.6',
+    desc:'ความหนาบานพับด้านซ้าย',
+    spec:'มม',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม'},
+  {no:'25.7',
+    desc:'ความหนาบานพับด้านขวา',
+    spec:'มม',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม'},
+  {no:'25.8',
+    desc:'ความหนาหูโช้คอัพด้านซ้าย',
+    spec:'มม',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม'},
+  {no:'25.9',
+    desc:'ความหนาหูโช้คอัพด้านขวา',
+    spec:'มม',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม'},
+  {no:'25.1',
+    desc:'ความหนาจุดยึดโรตารี่ด้านซ้าย',
+    spec:'มม',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม'},
+  {no:'25.11',
+    desc:'ความหนาจุดยึดโรตารี่ด้านขวา',
+    spec:'มม',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม'},
+  {no:'25.12',
+    desc:'เบ้ามาร์คชุดกลอนด้านนอก',
+    spec:'เมื่อประกอบกับชุดมือเปิดในต้องพอดี',
+    tool:'ชุดกลอน',
+    type:'single',
+    unit:'มม'},
+  {no:'25.13',
+    desc:'เส้นมาร์คชุดกลอนด้านใน',
+    spec:'เมื่อประกอบกับชุดมือเปิดในต้องพอดี',
+    tool:'ชุดมือเปิดใน',
+    type:'single',
+    unit:'มม'},
+  {no:'25.14',
+    desc:'การประกอบชุดมือเปิดใน/นอก',
+    spec:'เมื่อประกอบเสร็จแล้ว BOLT ต้องโผล่ไม่น้อยกว่า 3 เกลียว',
+    tool:'ชุดกลอน,สายตา',
+    type:'single'},
+  {no:'25.15',
+    desc:'ระยะการประกอบชุดกลอนล็อคฝาท้าย',
+    spec:'ต้องได้จุดกึ่งกลาง',
+    tool:'สายตา',
+    type:'single'},
+  {no:'25.16',
+    desc:'การปิดฝาท้าย',
+    spec:'กระดูกงูต้องไม่บี้แบนกับรางน้ำ',
+    tool:'สายตา',
+    type:'single'}
+]},
+{no:'26', title:'การประกอบจอหลังเก๋ง', items:[
+  {no:'26.1',
+    desc:'ขนาดลิ้นจอหลังเก๋ง',
+    spec:'9 ± 1 มม.',
+    tool:'ฟุตเหล็ก/ตลับเมตร',
+    type:'single',
+    unit:'มม.'},
+  {no:'26.2',
+    desc:'การประกอบกับจอบานตาย',
+    spec:'ต้องได้พอดี',
+    tool:'กระจกบานตาย',
+    type:'single'},
+  {no:'26.3',
+    desc:'การประกอบกับจอบานเลื่อน',
+    spec:'ต้องได้พอดี',
+    tool:'เฟรมบานเลื่อนหลังเก๋ง',
+    type:'single'},
+  {no:'26.4',
+    desc:'ความหนาลิ้นกระดูกงูจอกลังเก๋ง',
+    spec:'3 มม.',
+    tool:'ฟุตเหล็ก/ตลับเมตร',
+    type:'single',
+    unit:'มม.'}
+]},
+{no:'26', title:'ความสูงท้องรางน้ำ', items:[
+  {no:'26.1',
+    desc:'',
+    spec:'14 ± 2 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'},
+  {no:'26.2',
+    desc:'',
+    spec:'20 ± 2 มม.',
+    tool:'เวอร์เนียร์',
+    type:'single',
+    unit:'มม.'}
+]},
+{no:'27', title:'การประกอบไฟ', items:[
+  {no:'27.1',
+    desc:'ไฟโลโก้',
+    spec:'ต้องพอดีกับเบ้ามาร์คหลังคา',
+    tool:'ไฟมาตรฐาน',
+    type:'single'},
+  {no:'27.2',
+    desc:'ไฟเลี้ยว - ไฟหรี่',
+    spec:'ต้องพอดีกับเบ้ามาร์คหลังคา',
+    tool:'ไฟมาตรฐาน',
+    type:'single'},
+  {no:'27.3',
+    desc:'ไฟกลางเก๋ง',
+    spec:'ต้องพอดีกับเบ้ามาร์คหลังคา',
+    tool:'ไฟมาตรฐาน',
+    type:'single'},
+  {no:'27.4',
+    desc:'ไฟท้ายซ้าย-ขวา',
+    spec:'ต้องพอดีกับเบ้ามาร์คหลังคา',
+    tool:'ไฟมาตรฐาน',
+    type:'single'},
+  {no:'27.5',
+    desc:'ไฟเบรค',
+    spec:'ต้องพอดีกับเบ้ามาร์คหลังคา',
+    tool:'ไฟมาตรฐาน',
+    type:'single'}
+]},
+{no:'28', title:'ระยะการประกอบสวิทซ์ ON-OFF', items:[
+  {no:'28.1',
+    desc:'ระยะห่างจากระจกฝาท้ายขณะเปิด',
+    spec:'ต้องห่างจากกระจกฝาท้ายขณะปิดไม่น้อยกว่า  5 มม.',
+    tool:'ตลับเมตร',
+    type:'single'},
+  {no:'28.2',
+    desc:'ตำแหน่งการยึดสวิทซ์ ON-OFF',
+    spec:'± 5 มม.',
+    tool:'ตลับเมตร',
+    type:'single'}
+]},
+{no:'29', title:'ทดสอบน้ำ', items:[
+  {no:'29.1',
+    desc:'จอบานตายหลังเก๋ง',
+    spec:'น้ำต้องไม่รั่ว',
+    tool:'สายตา',
+    type:'single'},
+  {no:'29.2',
+    desc:'จอบานเลื่อนหลังเก๋ง',
+    spec:'น้ำต้องไม่รั่ว',
+    tool:'สายตา',
+    type:'single'},
+  {no:'29.3',
+    desc:'ฝาท้าย',
+    spec:'น้ำต้องไม่รั่ว',
+    tool:'สายตา',
+    type:'single'},
+  {no:'29.4',
+    desc:'จอข้าง',
+    spec:'น้ำต้องไม่รั่ว',
+    tool:'สายตา',
+    type:'single'}
+]},
+];
+
+var ACCESSORIES = [
+  'กระจกฝาท้าย','บานเลื่อนหลังเก๋ง','บานเลื่อนข้าง',
+  'กระจกบานผลัก','อลุมีเนียมขอบกระบะ','โช้คอัพ'
+];
+
+// ── THEME
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  var el=document.getElementById('themeIcon');
+  if(el) el.innerHTML=t==='dark'
+    ?'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+    :'<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+  try{localStorage.setItem('validator_theme',t);}catch(e){}
+}
+function toggleTheme(){applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');}
+(function(){try{applyTheme(localStorage.getItem('validator_theme')||'light');}catch(e){applyTheme('light');}})();
+
+function toast(msg,type){
+  var el=document.getElementById('toastEl');
+  el.textContent=msg;
+  el.className='toast show'+(type==='err'?' err':type==='ok'?' ok':'');
+  clearTimeout(window._toastT);
+  window._toastT=setTimeout(function(){el.classList.remove('show');},2600);
+}
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+
+// ── STATE
+var SESSION_KEY='validator_session';
+var session=null;
+var code='';
+var round=1;
+var jobRow=null;
+var answers={}; // key -> {val, valL, valR, ok:bool, ng:bool}
+var header={}; // free-text header fields
+var accAnswers={}; // accessory index -> 'ok'|'ng'
+var summaryText='';
+var sigNames={engineer:'',reviewer:'',approver:''};
+var totalAnswerable=0;
+
+function loadSession(){ try{return JSON.parse(sessionStorage.getItem(SESSION_KEY)||'null');}catch(e){return null;} }
+
+function init(){
+  var s=loadSession();
+  if(!s || s.role!=='validator'){
+    window.location.href='validator.html';
+    return;
+  }
+  session=s;
+  var params=new URLSearchParams(window.location.search);
+  code=(params.get('code')||'').trim();
+  if(!code){
+    document.getElementById('content').innerHTML='<div class="empty">ไม่พบรหัสชิ้นงานที่ระบุ — เปิดหน้านี้ผ่านปุ่มในหน้า Validator เท่านั้น</div>';
+    return;
+  }
+  loadEverything();
+}
+
+function loadEverything(){
+  if(typeof window.fbWatchMoldJobs!=='function' || typeof window.fbGetTrialHistory!=='function' || typeof window.fbGetTrialChecklist!=='function'){
+    setTimeout(loadEverything, 100);
+    return;
+  }
+  window.fbWatchMoldJobs(function(res){
+    if(res.error) return;
+    var row=(res.data||[]).find(function(r){ return (r.code||'').trim()===code; });
+    if(row) jobRow=row;
+  });
+  window.fbGetTrialHistory(code).then(function(rounds){
+    var maxRound=rounds.reduce(function(m,r){return Math.max(m,r.round||0);},0);
+    round=maxRound+1;
+    return window.fbGetTrialChecklist(code, round);
+  }).then(function(existing){
+    if(existing){
+      answers=existing.answers||{};
+      header=existing.header||{};
+      accAnswers=existing.accAnswers||{};
+      summaryText=existing.summary||'';
+      sigNames=existing.signatures||sigNames;
+    }
+    render();
+  }).catch(function(err){
+    toast('โหลดข้อมูลไม่สำเร็จ: '+err.message,'err');
+  });
+}
+
+// ── KEY ADDRESSING (position-based, since the source ISO document itself
+// has a handful of duplicate item numbers from old numbering typos — the
+// original 'no' label is only for display, never used as a lookup key)
+function itemKey(si, ii, subi){
+  return 's'+si+'-i'+ii+(subi!=null?('-sub'+subi):'');
+}
+
+function countAnswerable(){
+  var n=0;
+  TRIAL_CHECKLIST_TEMPLATE.forEach(function(s,si){
+    s.items.forEach(function(it,ii){
+      if(!it.groupOnly) n++;
+      (it.sub||[]).forEach(function(){ n++; });
+    });
+  });
+  return n + ACCESSORIES.length;
+}
+
+// ── RENDER
+function render(){
+  totalAnswerable = countAnswerable();
+  var el=document.getElementById('content');
+  var html='';
+  html += renderJobCard();
+  html += renderHeaderForm();
+  TRIAL_CHECKLIST_TEMPLATE.forEach(function(s,si){ html += renderSection(s,si); });
+  html += renderAccessories();
+  html += renderSummaryAndSig();
+  el.innerHTML = html;
+  document.getElementById('progressBar').style.display='flex';
+  updateProgress();
+}
+
+function renderJobCard(){
+  var r=jobRow||{};
+  return '<div class="job-card">'
+    +'<div class="code">'+esc(code)+'</div>'
+    +'<div class="detail">'+esc(r.detail||r.item||'-')+'</div>'
+    +'<div class="meta">'+esc(r.group||'-')+' · '+esc(r.category||'-')+' · '+esc(r.model||'-')+' · TRIAL ครั้งที่ '+round+'</div>'
+  +'</div>';
+}
+
+function renderHeaderForm(){
+  var f=function(key,label,defVal){
+    var v=header[key]!==undefined?header[key]:(defVal||'');
+    return '<label>'+label+'<input type="text" data-hk="'+key+'" value="'+esc(v)+'" onchange="onHeaderChange(this)"></label>';
+  };
+  return '<div class="header-box">'
+    +'<h3>ข้อมูลหัวเอกสาร</h3>'
+    +'<div class="field-grid">'
+      +f('roofModel','รุ่นหลังคา',jobRow?jobRow.model:'')
+      +f('moldNo','พิมพ์ที่')
+      +f('refDoc','เอกสารอ้างอิง')
+      +f('scheduledDate','กำหนดการ TRIAL วันที่')
+      +f('testDate','ดำเนินการทดสอบวันที่')
+      +f('resultDate','สรุปผลการทดสอบวันที่')
+    +'</div>'
+  +'</div>';
+}
+function onHeaderChange(inp){ header[inp.getAttribute('data-hk')]=inp.value; }
+
+function renderSection(s,si){
+  var itemsHtml = s.items.map(function(it,ii){ return renderItem(it,si,ii); }).join('');
+  return '<div class="section-card">'
+    +'<div class="section-head"><span class="no">'+esc(s.no)+'.</span> '+esc(s.title)+'</div>'
+    +(s.note?'<div class="section-note">'+esc(s.note)+'</div>':'')
+    +itemsHtml
+  +'</div>';
+}
+
+function renderItem(it,si,ii){
+  if(it.groupOnly){
+    // Label-only row that groups the sub-items below it — no input of its own
+    var subHtml0 = (it.sub||[]).map(function(si2,k){ return renderLeaf(si2, itemKey(si,ii,k), true); }).join('');
+    return '<div class="item-row"><div class="item-head"><span class="item-no">'+esc(it.no)+'</span><span class="item-desc">'+esc(it.desc)+'</span></div></div>'+subHtml0;
+  }
+  var ownHtml = renderLeaf(it, itemKey(si,ii), false);
+  var subHtml = (it.sub||[]).map(function(si2,k){ return renderLeaf(si2, itemKey(si,ii,k), true); }).join('');
+  return ownHtml + subHtml;
+}
+
+function renderLeaf(it, key, isSub){
+  var a = answers[key] || {};
+  var metaParts=[];
+  if(it.spec) metaParts.push('<b>เกณฑ์</b> '+esc(it.spec));
+  if(it.tool) metaParts.push('<b>เครื่องมือ</b> '+esc(it.tool));
+  var valHtml='';
+  if(it.type==='lr'){
+    valHtml = '<input class="val-input" type="text" placeholder="ซ้าย" data-key="'+key+'" data-field="valL" value="'+esc(a.valL||'')+'" onchange="onValChange(this)">'
+      +'<input class="val-input" type="text" placeholder="ขวา" data-key="'+key+'" data-field="valR" value="'+esc(a.valR||'')+'" onchange="onValChange(this)">'
+      +(it.unit?'<span class="val-unit">'+esc(it.unit)+'</span>':'');
+  } else if(it.type==='single'){
+    valHtml = '<input class="val-input" type="text" placeholder="ค่าที่วัดได้" data-key="'+key+'" data-field="val" value="'+esc(a.val||'')+'" onchange="onValChange(this)">'
+      +(it.unit?'<span class="val-unit">'+esc(it.unit)+'</span>':'');
+  }
+  return '<div class="item-row'+(isSub?' sub':'')+'">'
+    +'<div class="item-head"><span class="item-no">'+esc(it.no)+'</span><span class="item-desc">'+esc(it.desc)+'</span></div>'
+    +(metaParts.length?'<div class="item-meta">'+metaParts.join('')+'</div>':'')
+    +'<div class="item-controls">'
+      +valHtml
+      +'<div class="okng-toggle">'
+        +'<button class="okng-btn ok'+(a.ok?' on':'')+'" onclick="setOkNg(\''+key+'\',\'ok\')">OK</button>'
+        +'<button class="okng-btn ng'+(a.ng?' on':'')+'" onclick="setOkNg(\''+key+'\',\'ng\')">NG</button>'
+      +'</div>'
+    +'</div>'
+  +'</div>';
+}
+
+function onValChange(inp){
+  var key=inp.getAttribute('data-key'), field=inp.getAttribute('data-field');
+  if(!answers[key]) answers[key]={};
+  answers[key][field]=inp.value;
+}
+function setOkNg(key,which){
+  if(!answers[key]) answers[key]={};
+  if(which==='ok'){ answers[key].ok=!answers[key].ok; if(answers[key].ok) answers[key].ng=false; }
+  else { answers[key].ng=!answers[key].ng; if(answers[key].ng) answers[key].ok=false; }
+  rerenderOneItem(key);
+  updateProgress();
+}
+function rerenderOneItem(key){
+  // Cheap full re-render keeps this simple and correct — the DOM for 143
+  // items is small enough that this has no noticeable cost, and avoids
+  // bugs from trying to patch just one button's classes by hand.
+  render();
+}
+
+function renderAccessories(){
+  var rows = ACCESSORIES.map(function(name,i){
+    var v = accAnswers[i]||'';
+    return '<div class="acc-row"><span class="no">'+(i+1)+'.</span><span class="name">'+esc(name)+'</span>'
+      +'<div class="okng-toggle">'
+        +'<button class="okng-btn ok'+(v==='ok'?' on':'')+'" onclick="setAccOkNg('+i+',\'ok\')">OK</button>'
+        +'<button class="okng-btn ng'+(v==='ng'?' on':'')+'" onclick="setAccOkNg('+i+',\'ng\')">NG</button>'
+      +'</div></div>';
+  }).join('');
+  return '<div class="section-card"><div class="section-head">อุปกรณ์ประกอบ</div>'+rows+'</div>';
+}
+function setAccOkNg(i,which){
+  accAnswers[i]=accAnswers[i]===which?'':which;
+  render();
+  updateProgress();
+}
+
+function renderSummaryAndSig(){
+  return '<div class="header-box">'
+    +'<h3>สรุปผลการ TRIAL</h3>'
+    +'<textarea class="summary-input" onchange="summaryText=this.value" placeholder="สรุปผลการตรวจสอบโดยรวม...">'+esc(summaryText)+'</textarea>'
+    +'<div class="sig-grid">'
+      +'<label>วิศวกร TRIAL / ผู้ออกเอกสาร<input type="text" data-sig="engineer" value="'+esc(sigNames.engineer||'')+'" onchange="onSigChange(this)"></label>'
+      +'<label>หน.ส่วนประกันคุณภาพ / ผู้ทบทวน<input type="text" data-sig="reviewer" value="'+esc(sigNames.reviewer||'')+'" onchange="onSigChange(this)"></label>'
+      +'<label>ผ.จก.ฝ่ายประกันคุณภาพ / ผู้อนุมัติ<input type="text" data-sig="approver" value="'+esc(sigNames.approver||'')+'" onchange="onSigChange(this)"></label>'
+    +'</div>'
+  +'</div>';
+}
+function onSigChange(inp){ sigNames[inp.getAttribute('data-sig')]=inp.value; }
+
+function updateProgress(){
+  var answered=0;
+  Object.keys(answers).forEach(function(k){ if(answers[k].ok||answers[k].ng) answered++; });
+  Object.keys(accAnswers).forEach(function(k){ if(accAnswers[k]) answered++; });
+  document.getElementById('progressText').textContent='ตรวจแล้ว '+answered+'/'+totalAnswerable+' จุด';
+  document.getElementById('progressFill').style.width=(totalAnswerable?Math.round(answered/totalAnswerable*100):0)+'%';
+  document.getElementById('btnComplete').disabled = answered<totalAnswerable;
+}
+
+function saveChecklist(markComplete){
+  var answered=0;
+  Object.keys(answers).forEach(function(k){ if(answers[k].ok||answers[k].ng) answered++; });
+  Object.keys(accAnswers).forEach(function(k){ if(accAnswers[k]) answered++; });
+  if(markComplete && answered<totalAnswerable){
+    toast('กรอกให้ครบทุกจุดก่อน ('+answered+'/'+totalAnswerable+')','err');
+    return;
+  }
+  var data={
+    answers: answers, header: header, accAnswers: accAnswers,
+    summary: summaryText, signatures: sigNames,
+    completed: !!markComplete,
+    savedBy: session.name
+  };
+  window.fbSaveTrialChecklist(code, round, data).then(function(){
+    toast(markComplete?'บันทึกและยืนยันครบถ้วนแล้ว':'บันทึกร่างแล้ว','ok');
+  }).catch(function(err){
+    toast('บันทึกไม่สำเร็จ: '+err.message,'err');
+  });
+}
+
+init();
+
+</script>
+
+<script type="module">
+import { fbWatchMold, fbGetTrialHistory, fbGetTrialChecklist, fbSaveTrialChecklist } from './firebase-mold-sync.js';
+window.fbWatchMoldJobs = fbWatchMold;
+window.fbGetTrialHistory = fbGetTrialHistory;
+window.fbGetTrialChecklist = fbGetTrialChecklist;
+window.fbSaveTrialChecklist = fbSaveTrialChecklist;
+</script>
+
+</body>
+</html>
