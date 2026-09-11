@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>จัดการข้อมูล — Data Specialist</title>
+<meta name="theme-color" content="#2563eb">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{overflow-x:hidden;max-width:100vw}
+:root{
+  --font:'PSL Text','PSLText','Sarabun','Segoe UI',Arial,sans-serif;
+  --bg:#f0f2f7;--bg2:#fff;--bg3:#f5f6fa;
+  --surface:#e8ecf5;--surface2:#dde2ef;
+  --border:rgba(50,70,140,.10);--border2:rgba(50,70,140,.18);
+  --accent:#2563eb;--accent2:#1d4ed8;--accent-lt:#eff5ff;
+  --text:#1a1f35;--text2:#505880;--text3:#9099bc;
+  --green:#16a34a;--green-lt:#f0faf4;
+  --red:#dc2626;--red-lt:#fff1f1;
+  --amber:#b45309;--amber-lt:#fffbeb;
+  --shadow-lg:0 4px 24px rgba(20,40,100,.13);
+  --r:8px;--r2:12px;--r3:16px;
+}
+html[data-theme="dark"]{
+  --bg:#0f1220;--bg2:#1b2032;--bg3:#20263a;
+  --surface:#262c42;--surface2:#333a54;
+  --border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.16);
+  --accent:#3b82f6;--accent2:#7fb0ff;--accent-lt:rgba(37,99,235,.18);
+  --text:#e8ebf5;--text2:#b6bdda;--text3:#7b83a8;
+  --green:#4ade80;--green-lt:rgba(22,163,74,.18);
+  --red:#f87171;--red-lt:rgba(220,38,38,.18);
+  --amber:#fbbf24;--amber-lt:rgba(180,83,9,.22);
+}
+body{font-family:var(--font);font-size:15px;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;transition:background .15s,color .15s}
+
+.login-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-box{width:100%;max-width:360px;background:var(--bg2);border-radius:var(--r3);box-shadow:var(--shadow-lg);padding:32px 28px;text-align:center}
+.login-box h1{font-size:19px;margin-bottom:4px}
+.login-box p{font-size:13px;color:var(--text3);margin-bottom:22px}
+.login-box input{width:100%;padding:11px 14px;margin-bottom:12px;border-radius:var(--r);border:1.5px solid var(--border2);background:var(--surface);color:var(--text);font-family:var(--font);font-size:14.5px;outline:none}
+.login-box input:focus{border-color:var(--accent)}
+.login-box button{width:100%;padding:11px;border-radius:var(--r);border:none;background:var(--accent);color:#fff;font-family:var(--font);font-size:14.5px;font-weight:600;cursor:pointer;margin-top:4px}
+.login-box button:hover{background:var(--accent2)}
+.login-err{color:var(--red);font-size:13px;margin-top:10px;min-height:18px}
+
+.topbar{height:56px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:10px;position:sticky;top:0;z-index:50;box-shadow:0 1px 0 var(--border)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;flex:1;min-width:0}
+.logo svg{flex-shrink:0;color:var(--accent)}
+.who{font-size:12.5px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.icon-btn{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2);flex-shrink:0}
+.icon-btn:hover{background:var(--surface)}
+.upload-btn{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--r);border:none;background:var(--accent);color:#fff;font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;flex-shrink:0}
+.upload-btn:hover{background:var(--accent2)}
+
+.toolbar{padding:11px 18px;border-bottom:1px solid var(--border);background:var(--bg2);display:flex;align-items:center;gap:9px}
+.search-input{width:100%;padding:9px 12px;border-radius:var(--r);border:1.5px solid var(--border2);background:var(--surface);color:var(--text);font-family:var(--font);font-size:14px;outline:none}
+.search-input:focus{border-color:var(--accent)}
+
+.content{flex:1;padding:16px;max-width:900px;margin:0 auto;width:100%}
+.empty{text-align:center;padding:60px 20px;color:var(--text3)}
+
+.card{background:var(--bg2);border:1.5px solid var(--border2);border-radius:var(--r2);padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:.15s}
+.card:hover{border-color:var(--accent)}
+.card-top{display:flex;flex-wrap:wrap;gap:6px 14px;margin-bottom:6px;font-size:12.5px;color:var(--text3)}
+.card-code{font-family:'Courier New',monospace;font-weight:700;color:var(--accent2);font-size:14px}
+.card-detail{font-size:14.5px;font-weight:600;color:var(--text);margin:2px 0}
+.card-status{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11.5px;font-weight:700;margin-top:4px}
+
+/* ── MODALS */
+.overlay{position:fixed;inset:0;background:rgba(10,15,35,.45);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px}
+.overlay.off{display:none}
+.modal-box{background:var(--bg2);border-radius:var(--r3);max-width:520px;width:100%;max-height:86vh;overflow-y:auto;padding:22px}
+.modal-box h3{font-size:16px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+.modal-box h3 .x{cursor:pointer;color:var(--text3);font-size:18px}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px;margin-bottom:16px}
+.field-grid label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--text2)}
+.field-grid.full{grid-column:1 / -1}
+.field-grid input,.field-grid select{padding:8px 10px;border-radius:var(--r);border:1.5px solid var(--border2);background:var(--surface);color:var(--text);font-family:var(--font);font-size:13.5px}
+.modal-actions{display:flex;gap:8px}
+.btn-cancel{flex:1;padding:10px;border-radius:var(--r);border:1.5px solid var(--border2);background:var(--surface);color:var(--text2);font-family:var(--font);font-size:14px;font-weight:600;cursor:pointer}
+.btn-save{flex:1;padding:10px;border-radius:var(--r);border:none;background:var(--accent);color:#fff;font-family:var(--font);font-size:14px;font-weight:600;cursor:pointer}
+.btn-save:hover{background:var(--accent2)}
+
+.upload-drop{border:2px dashed var(--border2);border-radius:var(--r2);padding:32px 20px;text-align:center;color:var(--text3);cursor:pointer;margin-bottom:16px}
+.upload-drop:hover{border-color:var(--accent);color:var(--accent)}
+.upload-warn{background:var(--amber-lt);color:var(--amber);border-radius:var(--r);padding:10px 12px;font-size:12.5px;margin-bottom:16px}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg2);padding:10px 20px;border-radius:var(--r);font-size:13.5px;z-index:200;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+.toast.err{background:var(--red)}
+.toast.ok{background:var(--green)}
+
+@media(max-width:480px){
+  .field-grid{grid-template-columns:1fr}
+  .content{padding:12px}
+}
+</style>
+</head>
+<body>
+
+<div class="login-wrap" id="loginScreen">
+  <div class="login-box">
+    <h1>จัดการข้อมูลงาน</h1>
+    <p>สำหรับ Data Specialist เท่านั้น</p>
+    <input type="text" id="lUsername" placeholder="Username" autocomplete="off">
+    <input type="password" id="lPassword" placeholder="Password" autocomplete="off">
+    <button onclick="doLogin()">เข้าสู่ระบบ</button>
+    <div class="login-err" id="loginErr"></div>
+  </div>
+</div>
+
+<div id="appScreen" style="display:none;flex-direction:column;flex:1">
+  <div class="topbar">
+    <div class="logo">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <div>
+        <div>จัดการข้อมูลงาน</div>
+        <div class="who" id="whoLabel"></div>
+      </div>
+    </div>
+    <button class="upload-btn" onclick="openUpload()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      อัปโหลด Excel
+    </button>
+    <div class="icon-btn" onclick="toggleTheme()" title="โหมดกลางคืน">
+      <svg id="themeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </div>
+    <div class="icon-btn" onclick="doLogout()" title="ออกจากระบบ">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    </div>
+  </div>
+  <div class="toolbar">
+    <input class="search-input" id="searchInput" type="text" placeholder="ค้นหารหัส รุ่น หรือรายละเอียด..." oninput="renderList()" autocomplete="off">
+  </div>
+  <div class="content" id="content">
+    <div class="empty">กำลังโหลดข้อมูล...</div>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="overlay off" id="ovEdit" onclick="if(event.target===this)closeEdit()">
+  <div class="modal-box">
+    <h3><span>แก้ไขข้อมูลงาน</span><span class="x" onclick="closeEdit()">✕</span></h3>
+    <div class="field-grid" id="editFields"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeEdit()">ยกเลิก</button>
+      <button class="btn-save" onclick="saveEdit()">บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<!-- UPLOAD MODAL -->
+<div class="overlay off" id="ovUpload" onclick="if(event.target===this)closeUpload()">
+  <div class="modal-box">
+    <h3><span>อัปโหลดไฟล์ Excel</span><span class="x" onclick="closeUpload()">✕</span></h3>
+    <div class="upload-warn">⚠ การอัปโหลดจะแทนที่ข้อมูลงานทั้งหมดในระบบด้วยไฟล์นี้ ไม่สามารถย้อนกลับได้</div>
+    <div class="upload-drop" onclick="document.getElementById('fileInput').click()">คลิกเพื่อเลือกไฟล์ Excel (.xls, .xlsx)<br><small>คอลัมน์ (แถวหัว 2 ชั้น): กลุ่ม · หมวด · รุ่น · รหัสชิ้นงาน · รายการ · โครงการ/รายละเอียด · ต้นแบบ (นัดหมาย/แล้วเสร็จ) · แม่พิมพ์ (นัดหมาย/แล้วเสร็จ) · TRIAL (ครั้งที่/วันที่) · ผล TRIAL · หมายเหตุ</small></div>
+    <input type="file" id="fileInput" accept=".xls,.xlsx" style="display:none" onchange="handleFile(this.files[0])">
+    <div id="uploadStatus" style="font-size:13px;color:var(--text3);text-align:center"></div>
+  </div>
+</div>
+
+<div class="toast" id="toastEl"></div>
+
+<script>
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  var el=document.getElementById('themeIcon');
+  if(el) el.innerHTML=t==='dark'
+    ?'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+    :'<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+  try{localStorage.setItem('dspec_theme',t);}catch(e){}
+}
+function toggleTheme(){applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');}
+(function(){try{applyTheme(localStorage.getItem('dspec_theme')||'light');}catch(e){applyTheme('light');}})();
+
+function toast(msg,type){
+  var el=document.getElementById('toastEl');
+  el.textContent=msg;
+  el.className='toast show'+(type==='err'?' err':type==='ok'?' ok':'');
+  clearTimeout(window._toastT);
+  window._toastT=setTimeout(function(){el.classList.remove('show');},2600);
+}
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+
+// ── SESSION
+var SESSION_KEY='dspec_session';
+var session=null;
+var jobsData=[];
+var editingOriginal=null;
+
+function saveSession(s){ try{sessionStorage.setItem(SESSION_KEY, JSON.stringify(s));}catch(e){} }
+function loadSession(){ try{return JSON.parse(sessionStorage.getItem(SESSION_KEY)||'null');}catch(e){return null;} }
+function clearSession(){ try{sessionStorage.removeItem(SESSION_KEY);}catch(e){} }
+
+function showApp(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('appScreen').style.display='flex';
+  document.getElementById('whoLabel').textContent='Data Specialist: '+session.name;
+  if(typeof window.fbWatchMoldJobs==='function') window.fbWatchMoldJobs(onJobsUpdate);
+}
+function doLogin(){
+  var u=document.getElementById('lUsername').value.trim();
+  var p=document.getElementById('lPassword').value;
+  var errEl=document.getElementById('loginErr');
+  errEl.textContent='';
+  if(!u||!p){ errEl.textContent='กรอก Username และ Password'; return; }
+  if(typeof window.fbSubUserLogin!=='function'){ errEl.textContent='ระบบยังโหลดไม่เสร็จ ลองใหม่อีกครั้ง'; return; }
+  window.fbSubUserLogin(u,p).then(function(res){
+    if(!res){ errEl.textContent='Username หรือ Password ไม่ถูกต้อง'; return; }
+    if(res.error){ errEl.textContent='เข้าสู่ระบบไม่สำเร็จ: '+(res.error.message||''); return; }
+    if(res.role!=='dataSpecialist'){ errEl.textContent='บัญชีนี้ไม่ใช่บัญชี Data Specialist'; return; }
+    session=res;
+    saveSession(res);
+    showApp();
+  }).catch(function(err){
+    errEl.textContent='เกิดข้อผิดพลาด: '+(err.message||'');
+  });
+}
+function doLogout(){ clearSession(); window.location.href='readonly.html'; }
+
+// ── DATA LIST
+function onJobsUpdate(res){
+  if(res.error){ toast('โหลดข้อมูลไม่สำเร็จ: '+res.error.message,'err'); return; }
+  jobsData=res.data||[];
+  renderList();
+}
+function statusLabelOf(r){
+  var res=(r.result||'').toLowerCase();
+  if(res.indexOf('ng')>=0) return {t:'NG',c:'var(--red-lt)',fg:'var(--red)'};
+  if(res==='ok') return {t:'OK',c:'var(--green-lt)',fg:'var(--green)'};
+  if(res.indexOf('รอสรุปผล')>=0) return {t:'รอสรุปผล','c':'var(--amber-lt)',fg:'var(--amber)'};
+  if(!r.protoSched && !r.protoDone && !r.moldSched && !r.moldDone) return {t:'ยังไม่เริ่ม',c:'var(--surface)',fg:'var(--text3)'};
+  return {t:'กำลังดำเนินการ',c:'var(--accent-lt)',fg:'var(--accent)'};
+}
+function renderList(){
+  var q=(document.getElementById('searchInput').value||'').trim().toLowerCase();
+  var list=jobsData;
+  if(q){
+    list=list.filter(function(r){
+      var hay=[r.code,r.model,r.item,r.detail].join(' ').toLowerCase();
+      return hay.indexOf(q)>=0;
+    });
+  }
+  var el=document.getElementById('content');
+  if(!list.length){ el.innerHTML='<div class="empty">ไม่พบข้อมูล</div>'; return; }
+  el.innerHTML=list.map(function(r,i){
+    var st=statusLabelOf(r);
+    return '<div class="card" onclick="openEdit('+i+',\''+q.replace(/'/g,"\\'")+'\')">'
+      +'<div class="card-top"><span>'+esc(r.group||'-')+'</span><span>'+esc(r.category||'-')+'</span><span>'+esc(r.model||'-')+'</span></div>'
+      +'<div class="card-code">'+esc(r.code||'-')+'</div>'
+      +'<div class="card-detail">'+esc(r.detail||r.item||'-')+'</div>'
+      +'<span class="card-status" style="background:'+st.c+';color:'+st.fg+'">'+st.t+'</span>'
+    +'</div>';
+  }).join('');
+  el.dataset.filtered = q ? '1' : '0';
+  el._filteredList = list;
+}
+
+// ── EDIT
+var EDIT_FIELDS=[
+  {k:'group',l:'กลุ่ม'},{k:'category',l:'หมวด'},{k:'model',l:'รุ่น'},{k:'code',l:'รหัสชิ้นงาน'},
+  {k:'item',l:'รายการ'},{k:'detail',l:'โครงการ/รายละเอียด',full:true},
+  {k:'protoSched',l:'ต้นแบบ นัดหมาย'},{k:'protoDone',l:'ต้นแบบ แล้วเสร็จ'},
+  {k:'moldSched',l:'แม่พิมพ์ นัดหมาย'},{k:'moldDone',l:'แม่พิมพ์ แล้วเสร็จ'},
+  {k:'trialRound',l:'TRIAL ครั้งที่'},{k:'trialDate',l:'TRIAL วันที่'},
+  {k:'result',l:'ผล TRIAL'},{k:'note',l:'หมายเหตุ',full:true}
+];
+function openEdit(idx,q){
+  // If a search filter is active, `idx` is an index into the filtered
+  // list stored on render, not into the raw jobsData array — resolve
+  // through that so editing always targets the row actually shown.
+  var content=document.getElementById('content');
+  var row = (q && content._filteredList) ? content._filteredList[idx] : jobsData[idx];
+  if(!row) return;
+  editingOriginal = JSON.parse(JSON.stringify(row));
+  var html=EDIT_FIELDS.map(function(f){
+    var cls=f.full?' full':'';
+    return '<label class="'+cls.trim()+'">'+f.l+'<input type="text" data-k="'+f.k+'" value="'+esc(row[f.k]||'')+'"></label>';
+  }).join('');
+  document.getElementById('editFields').innerHTML=html;
+  document.getElementById('ovEdit').classList.remove('off');
+}
+function closeEdit(){ document.getElementById('ovEdit').classList.add('off'); editingOriginal=null; }
+function saveEdit(){
+  if(!editingOriginal) return;
+  var updated=Object.assign({}, editingOriginal);
+  document.querySelectorAll('#editFields input[data-k]').forEach(function(inp){
+    updated[inp.getAttribute('data-k')]=inp.value.trim();
+  });
+  if(typeof window.fbUpdateJobRow!=='function') return;
+  window.fbUpdateJobRow(editingOriginal, updated).then(function(){
+    toast('บันทึกแล้ว','ok');
+    closeEdit();
+  }).catch(function(err){
+    toast('บันทึกไม่สำเร็จ: '+(err.message||''),'err');
+  });
+}
+
+// ── UPLOAD (mirrors dashboard-admin.html's jobs importer exactly)
+function openUpload(){ document.getElementById('ovUpload').classList.remove('off'); document.getElementById('uploadStatus').textContent=''; }
+function closeUpload(){ document.getElementById('ovUpload').classList.add('off'); document.getElementById('fileInput').value=''; }
+function excelFieldGetter(r){
+  var keys=Object.keys(r);
+  return function g(){
+    for(var i=0;i<arguments.length;i++){
+      var c=arguments[i];
+      var k=keys.find(function(k){return k.toUpperCase().replace(/\s/g,'')===c.toUpperCase().replace(/\s/g,'');});
+      if(k!==undefined&&r[k]!==''&&r[k]!==null&&r[k]!==undefined) return String(r[k]).trim();
+    }
+    return '';
+  };
+}
+function toRowJobs(r){
+  var g=excelFieldGetter(r);
+  return{
+    group:g('กลุ่ม','GROUP'), category:g('หมวด','CATEGORY'), model:g('รุ่น','MODEL'),
+    code:g('รหัสชิ้นงาน','รหัส','CODE'), item:g('รายการ','ITEM'),
+    detail:g('โครงการ/รายละเอียด','รายละเอียด','โครงการ','DETAIL'),
+    protoSched:g('ต้นแบบนัดหมาย','ต้นแบบ นัดหมาย'), protoDone:g('ต้นแบบแล้วเสร็จ','ต้นแบบ แล้วเสร็จ'),
+    moldSched:g('แม่พิมพ์นัดหมาย','แม่พิมพ์ นัดหมาย'), moldDone:g('แม่พิมพ์แล้วเสร็จ','แม่พิมพ์ แล้วเสร็จ'),
+    trialRound:g('TRIALครั้งที่','TRIAL ครั้งที่'), trialDate:g('TRIALวันที่','TRIAL วันที่'),
+    result:g('ผลTRIAL','ผล TRIAL'), note:g('หมายเหตุ','NOTE')
+  };
+}
+function handleFile(file){
+  if(!file) return;
+  document.getElementById('uploadStatus').textContent='กำลังอ่านไฟล์...';
+  var fr=new FileReader();
+  fr.onload=function(e){
+    try{
+      var wb=XLSX.read(e.target.result,{type:'array'});
+      var ws=wb.Sheets[wb.SheetNames[0]];
+      var raw=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+      var h1=raw[0]||[], h2=raw[1]||[];
+      var lastH1='';
+      var keys=h1.map(function(v,i){
+        var top=(v!==undefined&&v!==null&&String(v).trim()!=='')?String(v).trim():lastH1;
+        lastH1=top;
+        var sub=h2[i]!==undefined&&h2[i]!==null?String(h2[i]).trim():'';
+        return sub?(top+' '+sub):top;
+      });
+      var rows=raw.slice(2).map(function(arr){
+        var o={};
+        keys.forEach(function(k,i){ o[k]=arr[i]!==undefined?arr[i]:''; });
+        return o;
+      });
+      var data=rows.map(toRowJobs).filter(function(r){ return !!(r.group||r.category||r.model||r.code||r.item||r.detail); });
+      document.getElementById('uploadStatus').textContent='กำลังอัปโหลด '+data.length+' แถว...';
+      window.fbCloudPushJobs(data, file.name).then(function(){
+        toast('อัปโหลดสำเร็จ '+data.length+' แถว','ok');
+        closeUpload();
+      }).catch(function(err){
+        document.getElementById('uploadStatus').textContent='';
+        toast('อัปโหลดไม่สำเร็จ: '+(err.message||''),'err');
+      });
+    }catch(ex){
+      document.getElementById('uploadStatus').textContent='';
+      toast('อ่านไฟล์ไม่สำเร็จ: '+ex.message,'err');
+    }
+  };
+  fr.onerror=function(){ toast('อ่านไฟล์ไม่สำเร็จ','err'); };
+  fr.readAsArrayBuffer(file);
+}
+
+// ── INIT: restore session if this browser tab already logged in.
+// Called from the module script below (after it finishes setting up
+// window.fbWatchMoldJobs etc.) rather than running immediately here —
+// module scripts are deferred and execute after this classic script, so
+// calling showApp() from this IIFE would run before fbWatchMoldJobs even
+// exists yet, leaving the page stuck on "กำลังโหลดข้อมูล...".
+function tryRestoreSession(){
+  var s=loadSession();
+  if(s && s.role==='dataSpecialist'){ session=s; showApp(); }
+}
+</script>
+
+<script type="module">
+import { fbWatchMold, fbSubUserLogin, fbUpdateJobRow, fbPushMold } from './firebase-mold-sync.js';
+window.fbWatchMoldJobs = fbWatchMold;
+window.fbSubUserLogin = fbSubUserLogin;
+window.fbUpdateJobRow = fbUpdateJobRow;
+window.fbCloudPushJobs = fbPushMold;
+tryRestoreSession();
+</script>
+
+</body>
+</html>
